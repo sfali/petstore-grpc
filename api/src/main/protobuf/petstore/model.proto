@@ -41,7 +41,7 @@ message Pet {
   Category category = 2 [(scalapb.field).no_box = true];
   string name = 3;
   repeated string photoUrls = 4;
-  repeated Tag rags = 5;
+  repeated Tag tags = 5;
   PetStatus status = 6;
 }
 
