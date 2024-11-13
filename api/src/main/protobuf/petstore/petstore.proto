@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package petstore.api.service;
+
+import "scalapb/scalapb.proto";
+import "google/api/annotations.proto";
+import "petstore/model.proto";
+
+option java_multiple_files = false;
+option java_package = "com.improving.petstore.api.java_api";
+option java_outer_classname = "PetStoreProto";
+
+option (scalapb.options) = {
+  single_file: true
+  lenses: true
+  retain_source_code_info: true
+  preserve_unknown_fields: false
+  no_default_values_in_constructor: true
+  flat_package: true
+  package_name: "com.improving.petstore.api.scala_api"
+};
+
+service PetService {
+
+  // Uploads an image
+  rpc UploadImage (petstore.api.model.UploadImageRequest) returns (petstore.api.model.ApiResponse) {
+    option (google.api.http) = {
+      post: "/v2/pet/{petId}/uploadImage"
+      body: "body"
+    };
+  }
+
+  // Add a new pet to the store
+  rpc AddPet (petstore.api.model.Pet) returns (petstore.api.model.ApiResponse) {
+    option (google.api.http) = {
+      post: "/v2/pet"
+      body: "*"
+    };
+  }
+
+  // Update an existing pet
+  rpc UpdatePet (petstore.api.model.Pet) returns (petstore.api.model.ApiResponse) {
+    option (google.api.http) = {
+      put: "/v2/pet"
+      body: "*"
+    };
+  }
+
+  // Find pets by status
+  rpc FindByStatus (petstore.api.model.FindByStatusRequest) returns (petstore.api.model.Pet) {
+    option (google.api.http) = {
+      get: "/v2/pet/findByStatus"
+    };
+  }
+
+  // Find pet by ID
+  rpc FindByPetId (petstore.api.model.PetByIdRequest) returns (petstore.api.model.Pet) {
+    option (google.api.http) = {
+      get: "/v2/pet/{petId}"
+    };
+  }
+
+  // Updates a pet in teh store with form data
+  rpc UpdatePetById (petstore.api.model.UpdatePetRequest) returns (petstore.api.model.Pet) {
+    option (google.api.http) = {
+      post: "/v2/pet/{petId}"
+      body: "body"
+    };
+  }
+
+  // Delete pet by ID
+  rpc DeleteByPetId (petstore.api.model.PetByIdRequest) returns (petstore.api.model.Pet) {
+    option (google.api.http) = {
+      delete: "/v2/pet/{petId}"
+    };
+  }
+}
+
+service OrderService {
+
+  // Place an order for a pet
+  rpc PlaceOrder (petstore.api.model.Order) returns (petstore.api.model.Order) {
+    option (google.api.http) = {
+      post: "/v2/store"
+      body: "*"
+    };
+  }
+
+  // Find a purchase order by ID
+  rpc FindOrderById (petstore.api.model.OrderByIdRequest) returns (petstore.api.model.Order) {
+    option (google.api.http) = {
+      get: "/v2/store/{orderId}"
+    };
+  }
+
+  // Find a purchase order by ID
+  rpc DeleteOrderById (petstore.api.model.OrderByIdRequest) returns (petstore.api.model.ApiResponse) {
+    option (google.api.http) = {
+      delete: "/v2/store/{orderId}"
+    };
+  }
+}
+
+service UserService {
+
+  // Creates list of users with given input array
+  rpc CreateUsersWithListInput (petstore.api.model.CreateUsersRequest) returns (petstore.api.model.ApiResponse) {
+    option (google.api.http) = {
+      post: "/v2/user/createWithList"
+      body: "*"
+    };
+  }
+
+  // Get user by user name
+  rpc GetUser (petstore.api.model.UserRequest) returns (petstore.api.model.User) {
+    option (google.api.http) = {
+      get: "/v2/user/{username}"
+    };
+  }
+
+  // Update user
+  rpc UpdateUser (petstore.api.model.UpdateUser) returns (petstore.api.model.ApiResponse) {
+    option (google.api.http) = {
+      put: "/v2/user/{username}"
+      body: "user"
+    };
+  }
+
+  // Delete user
+  rpc DeleteUser (petstore.api.model.UserRequest) returns (petstore.api.model.User) {
+    option (google.api.http) = {
+      delete: "/v2/user/{username}"
+    };
+  }
+
+  // Create user
+  rpc CreateUser (petstore.api.model.User) returns (petstore.api.model.User) {
+    option (google.api.http) = {
+      post: "/v2/user"
+      body: "*"
+    };
+  }
+}

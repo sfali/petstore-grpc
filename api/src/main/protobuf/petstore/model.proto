@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package petstore.api.model;
+
+import "scalapb/scalapb.proto";
+
+option (scalapb.options) = {
+  single_file: true
+  lenses: true
+  retain_source_code_info: true
+  preserve_unknown_fields: false
+  no_default_values_in_constructor: true
+  flat_package: true
+  package_name: "com.improving.petstore.api.scala_api.model"
+};
+
+message ApiResponse {
+  int32 code = 1;
+  string type = 2;
+  string message = 3;
+}
+
+message Category {
+  int64 id = 1;
+  string name = 2;
+}
+
+message Tag {
+  int64 id = 1;
+  string name = 2;
+}
+
+enum PetStatus {
+  available = 0;
+  pending = 1;
+  sold = 2;
+}
+
+message Pet {
+  int64 id = 1;
+  Category category = 2 [(scalapb.field).no_box = true];
+  string name = 3;
+  repeated string photoUrls = 4;
+  repeated Tag rags = 5;
+  PetStatus status = 6;
+}
+
+enum OrderStatus {
+  placed = 0;
+  approved = 1;
+  delivered = 2;
+}
+
+message Order {
+  int64 id = 1;
+  int64 petId = 2;
+  int32 quantity = 3;
+  string shipDate = 4;
+  OrderStatus status = 5;
+  bool complete = 6;
+}
+
+message User {
+  int64 id = 1;
+  string username = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string email = 5;
+  string password = 6;
+  string phone = 7;
+  int32 userStatus = 8;
+}
+
+// requests
+
+message CreateUsersRequest {
+  repeated User users = 1;
+}
+
+message UserRequest {
+  string username = 1;
+}
+
+message UpdateUser {
+  string username = 1;
+  User user = 2 [(scalapb.field).no_box = true];
+}
+
+message UploadImageRequest {
+  message UploadImageBodyData {
+    string additionalMetadata = 1;
+    string file = 2;
+  }
+
+  int64 petId = 1;
+  UploadImageBodyData body = 2;
+}
+
+message FindByStatusRequest {
+  repeated PetStatus status = 1;
+}
+
+message PetByIdRequest {
+  int64 petId = 1;
+}
+
+message UpdatePetRequest {
+  message UpdatePetBodyData {
+    string name = 1;
+    PetStatus status = 2;
+  }
+
+  int64 petId = 1;
+  UpdatePetBodyData body = 2;
+}
+
+message OrderByIdRequest {
+  int64 orderId = 1;
+}

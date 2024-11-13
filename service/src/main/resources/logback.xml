@@ -1,0 +1,34 @@
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
+<configuration>
+    <variable name="LOG_LEVEL_GENERAL" value="${LOG_LEVEL_GENERAL:-INFO}"/>
+    <variable name="LOG_LEVEL_PEKKO_STREAM" value="${LOG_LEVEL_PEKKO_STREAM:-INFO}"/>
+    <variable name="LOG_LEVEL_CLUSTER_BS" value="${LOG_LEVEL_CLUSTER_BS:-WARN}"/>
+    <variable name="LOG_LEVEL_KAFKA" value="${LOG_LEVEL_KAFKA:-WARN}"/>
+    <variable name="LOG_LEVEL_SLICK" value="${LOG_LEVEL_SLICK:-INFO}"/>
+    <variable name="LOG_LEVEL_APP" value="${LOG_LEVEL_APP:-INFO}"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+    <logger name="ch.qos.logback" level="OFF" additivity="false" />
+    <logger name="org.apache.kafka" level="${LOG_LEVEL_KAFKA}"/>
+    <logger name="org.apache.pekko.management.cluster.bootstrap" level="${LOG_LEVEL_CLUSTER_BS}"/>
+    <logger name="org.apache.pekko.stream.Materializer" level="${LOG_LEVEL_PEKKO_STREAM}"/>
+    <logger name="org.apache.pekko.cluster.sharding.typed.internal" level="WARN"/>
+    <logger name="org.apache.pekko.cluster.singleton" level="WARN"/>
+    <!-- JMX Importer starts up before the kafka consumers, and it throws a ton of WARN telling us the consumers don't exist -->
+    <logger name="com.improving" level="${LOG_LEVEL_APP}"/>
+    <logger name="slick" level="${LOG_LEVEL_SLICK}"/>
+
+    <root level="${LOG_LEVEL_GENERAL}">
+        <appender-ref ref="ASYNC" />
+    </root>
+
+</configuration>
