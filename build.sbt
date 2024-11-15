@@ -5,9 +5,7 @@ import org.apache.pekko.grpc.sbt.PekkoGrpcPlugin.autoImport.PekkoGrpc
 lazy val api = project
   .in(file("api"))
   .configure(commonSettings)
-  .settings(
-    name := "petstore-grpc-api"
-  )
+  .settings(name := "petstore-grpc-api")
 
 lazy val client = project
   .in(file("client"))
@@ -29,7 +27,7 @@ lazy val server = project
     buildInfoPackage := "com.improving.petstore.server",
     libraryDependencies := Server,
     Compile / PB.targets ++= Seq(
-      grpc_rest_gateway.gatewayGen() -> crossTarget.value / "pekko-grpc" / "main",
+      grpc_rest_gateway.gatewayGen(scala3Sources = true) -> crossTarget.value / "pekko-grpc" / "main",
       grpc_rest_gateway.swaggerGen() -> (Compile / resourceManaged).value / "specs"
     )
   )

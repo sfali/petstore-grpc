@@ -8,5 +8,9 @@ addDependencyTreePlugin
 
 libraryDependencies ++= Seq(
   "com.thesamet.scalapb" %% "compilerplugin" % "0.11.17",
-  "io.github.sfali23" %% "grpc-rest-gateway-code-gen" % "0.6.0"
+  "io.github.sfali23" %% "grpc-rest-gateway-code-gen" % "0.7.0"
+)
+
+resolvers ++= Seq(
+  "Sonatype OSS" at "https://s01.oss.sonatype.org/content/groups/public/"
 )

@@ -40,12 +40,13 @@ object CommonSettings {
     project
       .settings(
         organization := "io.github.sfali23",
-        version := "0.1.0-SNAPSHOT",
+        version := "0.7.0",
         scalaVersion := V.Scala2_13,
         Global / onChangedBuildSource := ReloadOnSourceChanges,
         resolvers ++= Seq(
           "Sonatype OSS" at "https://s01.oss.sonatype.org/content/groups/public/"
-        )
+        ),
+        scalacOptions ++= Seq("-Xsource:3")
       )
       .configure(configureBuildInfo)
       .enablePlugins(ScalafmtPlugin, DependencyUpdaterPlugin)
