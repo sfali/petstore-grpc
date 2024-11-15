@@ -40,7 +40,7 @@ object CommonSettings {
     project
       .settings(
         organization := "io.github.sfali23",
-        version := "0.7.0",
+        version := "0.1.0-SNAPSHOT",
         scalaVersion := V.Scala2_13,
         Global / onChangedBuildSource := ReloadOnSourceChanges,
         resolvers ++= Seq(

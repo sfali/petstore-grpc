@@ -28,7 +28,7 @@ lazy val server = project
     libraryDependencies := Server,
     Compile / PB.targets ++= Seq(
       grpc_rest_gateway.gatewayGen(scala3Sources = true) -> crossTarget.value / "pekko-grpc" / "main",
-      grpc_rest_gateway.swaggerGen() -> (Compile / resourceManaged).value / "specs"
+      grpc_rest_gateway.swaggerGen() -> (Compile / resourceDirectory).value / "specs"
     )
   )
   .dependsOn(api)
