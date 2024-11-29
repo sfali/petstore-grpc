@@ -31,6 +31,7 @@ lazy val client = project
 lazy val `netty-gateway-service` = project
   .in(file("netty-gateway-service"))
   .configure(commonSettings)
+  .configure(docker)
   .settings(
     name := "petstore-netty-gateway-service",
     buildInfoPackage := "com.improving.petstore.netty_gateway",
@@ -48,6 +49,7 @@ lazy val `netty-gateway-service` = project
 lazy val `pekko-gateway-service` = project
   .in(file("pekko-gateway-service"))
   .configure(commonSettings)
+  .configure(docker)
   .settings(
     name := "petstore-pekko-gateway-service",
     buildInfoPackage := "com.improving.petstore.pekko_gateway",
@@ -66,6 +68,7 @@ lazy val `pekko-gateway-service` = project
 lazy val service = project
   .in(file("service"))
   .configure(commonSettings)
+  .configure(docker)
   .settings(
     name := "petstore-grpc-service",
     buildInfoPackage := "com.improving.petstore.service",

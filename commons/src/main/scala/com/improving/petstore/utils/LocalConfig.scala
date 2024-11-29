@@ -46,10 +46,6 @@ object LocalConfig {
           .replaceAll("\\{gateway-port}", finalGatewayPort.toString)
       else pekkoGatewayConfig.replaceAll("\\{gateway-port}", finalGatewayPort.toString)
 
-    val pekkoManagementConfig =
-      if (managementPort != baseManagementPort) s""""""
-      else ""
-
     val config =
       s"""pekko.discovery.config.services {
          |  "$serviceName" {
@@ -63,7 +59,7 @@ object LocalConfig {
          |pekko.management.http.bind-port=\"\"
          |pekko.remote.artery.bind.port=\"\"
          |pekko.actor.provider=cluster
-         |pekko.management.cluster.bootstrap.contact-point-discovery.service-name=$serviceName$pekkoManagementConfig
+         |pekko.management.cluster.bootstrap.contact-point-discovery.service-name=$serviceName
          |pekko.remote.artery.canonical.port=$finalRemotePort
          |pekko.management.http.port=$finalManagementPort
          |app.grpc-settings.port=$grpcPort
@@ -72,6 +68,6 @@ object LocalConfig {
     ConfigFactory
       .parseString(config)
       .withFallback(ConfigFactory.load("local-shared"))
-      .withFallback(ConfigFactory.load())
+      .withFallback(ConfigFactory.load("local"))
   }
 }
