@@ -4,7 +4,7 @@
 *.iml
 *.class
 *.log
-target/
+**/target
 project/target/
 project/boot/
 dist/
@@ -32,3 +32,4 @@ sbt-cache/**
 **/buf*.yaml
 *.dylib
 **/resources/specs/**/*.yml
+**/*.txt

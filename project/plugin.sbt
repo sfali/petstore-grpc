@@ -8,7 +8,7 @@ addDependencyTreePlugin
 
 libraryDependencies ++= Seq(
   "com.thesamet.scalapb" %% "compilerplugin" % "0.11.17",
-  "io.github.sfali23" %% "grpc-rest-gateway-code-gen" % "0.7.1"
+  "io.github.sfali23" %% "grpc-rest-gateway-code-gen" % "0.8.1"
 )
 
 resolvers ++= Seq(
