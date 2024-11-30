@@ -75,10 +75,7 @@ object CommonSettings {
         Docker / dockerCommands := (Docker / dockerCommands).value.flatMap {
           case userCmd @ Cmd("USER", "1001:0") =>
             Seq(
-              // Add glibc compatibility layer to Alpine to ensure compatibility with recent versions of gRPC shaded Netty server
-              // https://github.com/grpc/grpc-java/issues/10947
               Cmd("RUN", "apk update && apk add --no-cache gcompat"),
-              // Next two packages to account for vulnerabilities https://nvd.nist.gov/vuln/detail/CVE-2024-5535 https://nvd.nist.gov/vuln/detail/CVE-2024-4741, https://nvd.nist.gov/vuln/detail/CVE-2024-4603,
               Cmd("RUN", "apk upgrade --no-cache libssl3"),
               Cmd("RUN", "apk upgrade --no-cache libcrypto3"),
               Cmd("ENV", "LD_PRELOAD=/lib/libgcompat.so.0"),

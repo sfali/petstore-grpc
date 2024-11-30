@@ -1,0 +1,76 @@
+= Petstore gRPC
+
+Petstore gRPC is a reference implementation for https://github.com/sfali/grpc-rest-gateway[gRPC-REST gateway]. This project is to demonstrate how `gRPC-REST gateway` can be integrated into a project. This project uses `Apache Pekko` but it can be used in any scala based project.
+
+== Project structure
+
+This project divided into following modules:
+
+. `api` &mdash; contains protobuf files for petstore.
+. `commons` &mdash; contains common code to run locally.
+. `client` &mdash; contains configuration to generate `Apache Pekko` gRPC client and server code.
+. `service` &mdash; contains implementation of petstore services and host gRPC server, it deploys as a separate module.
+. `pekko-gateway-service` &mdash; contains configuration to generate `GrpcGatewayHandler` for `Pekko` based implementation, it also deploys as a separate module.
+. `netty-gateway-service` &mdash; contains configuration to generate `GrpcGatewayHandler` for `Netty` based implementation, it also deploys as a separate module.
+
+== How to run service
+
+=== Running service locally
+
+*Run gRPC service as follows:*
+
+[source, shell]
+----
+  sbt "service / run local"
+----
+
+gRPC service will start at port `8080`.
+
+**Run Pekko based implementation of gateway server as follows:**
+
+[source, shell]
+----
+  sbt "pekko-gateway-service / run local"
+----
+
+Gateway HTTP service will start at port `7070`.
+
+Visit `http://localhost:7070` for Petstore swagger page.
+
+**Run Netty based implementation of gateway server as follows:**
+
+[source, shell]
+----
+  sbt "netty-gateway-service / run local"
+----
+
+Gateway HTTP service will start at port `7070`.
+
+Visit `http://localhost:7070` for Petstore swagger page.
+
+=== Running service in docker container
+
+Build service as follows:
+
+[source, shell]
+----
+  sbt "Docker / publishLocal"
+----
+
+**Run Pekko based implementation of gateway server as follows:**
+
+[source, shell]
+----
+  ./start-service.sh pekko
+----
+
+Gateway HTTP service will start at port `8080` within the container but it is expsoed as poty `7070`.
+
+**Run Netty based implementation of gateway server as follows:**
+
+[source, shell]
+----
+  ./start-service.sh netty
+----
+
+Gateway HTTP service will start at port `8080` within the container but it is expsoed as poty `7070`.
