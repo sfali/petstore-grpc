@@ -4,8 +4,8 @@ package server
 
 import com.typesafe.config.Config
 
-import scala.concurrent.duration._
-import scala.jdk.DurationConverters._
+import scala.concurrent.duration.*
+import scala.jdk.DurationConverters.*
 
 case class HttpSettings(host: String, port: Int, hardTerminationDeadline: FiniteDuration)
 

@@ -1,0 +1,16 @@
+services:
+  grpc-server:
+    image: sfali23/petstore-grpc-service:0.1.0-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Dconfig.resource=docker.conf
+
+  netty-gateway-server:
+    image: sfali23/petstore-netty-gateway-service:0.1.0-SNAPSHOT
+    ports:
+      - "7070:8080"
+    environment:
+      - JAVA_OPTS=-Dconfig.resource=docker.conf
+      - GRPC_HOST=grpc-server
+      - REST_GATEWAY_PORT=8080 # Rest gateway running at port 8080

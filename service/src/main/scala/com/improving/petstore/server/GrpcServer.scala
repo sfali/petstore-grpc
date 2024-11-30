@@ -2,15 +2,8 @@ package com.improving
 package petstore
 package server
 
+import petstore.api.scala_api.{OrderService, OrderServiceHandler, PetService, PetServiceHandler, UserService, UserServiceHandler}
 import server.service.{OrderServiceImpl, PetServiceImpl, UserServiceImpl}
-import petstore.api.scala_api.{
-  OrderService,
-  OrderServiceHandler,
-  PetService,
-  PetServiceHandler,
-  UserService,
-  UserServiceHandler
-}
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.grpc.scaladsl.{ServerReflection, ServiceHandler}
 import org.apache.pekko.http.scaladsl.Http

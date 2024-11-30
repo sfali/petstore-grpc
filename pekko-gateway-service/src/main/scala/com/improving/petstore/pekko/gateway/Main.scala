@@ -1,25 +1,36 @@
 package com.improving
 package petstore
+package pekko
+package gateway
 
-import com.improving.petstore.server.{GrpcServer, HttpSettings}
+import com.improving.grpc_rest_gateway.runtime.server.GatewayServer
+import petstore.api.scala_api.{OrderServiceGatewayHandler, PetServiceGatewayHandler, UserServiceGatewayHandler}
 import com.typesafe.config.Config
-import org.apache.pekko.Done
-import org.apache.pekko.actor.NoSerializationVerificationNeeded
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.apache.pekko.actor.typed.{ActorSystem, Behavior}
-import org.apache.pekko.management.scaladsl.PekkoManagement
+import org.apache.pekko
+import pekko.actor.NoSerializationVerificationNeeded
+import pekko.actor.typed.scaladsl.Behaviors
+import pekko.actor.typed.{ActorSystem, Behavior}
+import pekko.grpc.GrpcClientSettings
+import pekko.management.scaladsl.PekkoManagement
 
 import scala.util.{Failure, Success}
 
 object Main {
 
   def main(args: Array[String]): Unit = {
-    val systemName = "PetstoreGrpcRestGateway"
+    val systemName = "PetstorePekkoGateway"
     if (args.nonEmpty && args(0) == "local")
       ActorSystem[Nothing](
         GuardianBehavior(),
         systemName,
-        utils.LocalConfig(serviceName = "petstore-grpc-service", nodeNum = 1, totalNumOfNodes = 1)
+        utils.LocalConfig(
+          serviceName = "petstore-pekko-gateway",
+          nodeNum = 1,
+          totalNumOfNodes = 1,
+          remotePort = 18355,
+          managementPort = 9559,
+          nettyImpl = false
+        )
       )
     else ActorSystem[Nothing](GuardianBehavior(), systemName)
   }
@@ -44,7 +55,7 @@ object GuardianBehavior {
 
         Behaviors.receiveMessagePartial {
           case Init =>
-            context.pipeToSelf(init(config.getConfig("app.grpc-settings"))) {
+            context.pipeToSelf(PekkoManagement(system).start()) {
               case Failure(ex) =>
                 context.log.error("Unable to start system", ex)
                 FailedInit
@@ -59,16 +70,24 @@ object GuardianBehavior {
             Behaviors.stopped
 
           case SystemStarted =>
+            val grpcClientSettings = GrpcClientSettings.fromConfig("pekko-gateway")
+            startGatewayServer(config.getConfig("rest-gateway"), grpcClientSettings)
+
             Behaviors.same
         }
       }
       .narrow
 
-  private def init(config: Config)(implicit system: ActorSystem[?]) = {
-    import system.executionContext
-    for {
-      _ <- PekkoManagement(system).start()
-      _ <- GrpcServer(HttpSettings(config)).run()
-    } yield Done
-  }
+  private def startGatewayServer(
+    config: Config,
+    grpcClientSettings: GrpcClientSettings
+  )(implicit
+    system: ActorSystem[?]
+  ): Unit =
+    GatewayServer(
+      config = config,
+      handlers = PetServiceGatewayHandler(grpcClientSettings),
+      OrderServiceGatewayHandler(grpcClientSettings),
+      UserServiceGatewayHandler(grpcClientSettings)
+    ).run()
 }
