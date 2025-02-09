@@ -57,7 +57,10 @@ lazy val `pekko-gateway-service` = project
     (Compile / PB.protoSources) += (api / baseDirectory).value / "src" / "main" / "protobuf",
     Compile / PB.targets ++= Seq(
       grpc_rest_gateway
-        .gatewayGen(scala3Sources = true, implementationType = "pekko") -> (Compile / sourceManaged).value / "scalapb",
+        .gatewayGen(
+          scala3Sources = true,
+          implementationType = grpc_rest_gateway.ImplementationType.Pekko
+        ) -> (Compile / sourceManaged).value / "scalapb",
       grpc_rest_gateway.swaggerGen() -> (Compile / resourceDirectory).value / "specs"
     ),
     run / fork := true

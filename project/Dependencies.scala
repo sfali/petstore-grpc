@@ -5,7 +5,7 @@ object Dependencies {
   object V {
     val GoogleCommonProtos = "2.9.6-0"
     val GrpcJava: String = scalapb.compiler.Version.grpcJavaVersion
-    val GrpcRestGateway = "0.8.1"
+    val GrpcRestGateway = "0.8.4"
     val Logback = "1.5.12"
     val Pekko = "1.1.2"
     val PekkoGrpc = "1.1.1"
