@@ -6,12 +6,13 @@ object Dependencies {
     val GoogleCommonProtos = "2.9.6-0"
     val GrpcJava: String = scalapb.compiler.Version.grpcJavaVersion
     val GrpcRestGateway = "0.8.4"
-    val Logback = "1.5.12"
-    val Pekko = "1.1.2"
+    val Logback = "1.5.16"
+    val Pekko = "1.1.3"
     val PekkoGrpc = "1.1.1"
     val PekkoHttp = "1.1.0"
     val PekkoManagement = "1.1.0"
-    val Scala2_13 = "2.13.15"
+    val PekkoPersistenceR2dbc = "1.1.0-M1"
+    val Scala2_13 = "2.13.16"
     val Scala3 = "3.5.2"
     val ScalaPb: String = scalapb.compiler.Version.scalapbVersion
     val ScalaPbJson = "0.12.1"
@@ -50,7 +51,11 @@ object Dependencies {
     "org.apache.pekko" %% "pekko-management-cluster-bootstrap" % V.PekkoManagement
   )
 
-  val Service: Seq[ModuleID] = Commons ++ PekkoBootstrap
+  val Service: Seq[ModuleID] = Seq(
+    "org.apache.pekko" %% "pekko-persistence-typed" % V.Pekko,
+    "org.apache.pekko" %% "pekko-persistence-r2dbc" % V.PekkoPersistenceR2dbc,
+    "org.apache.pekko" %% "pekko-persistence-testkit" % V.Pekko % Test
+  ) ++ Commons ++ PekkoBootstrap
 
   val NettyGatewayService: Seq[ModuleID] = Seq(
     "io.github.sfali23" %% "grpc-rest-gateway-runtime-netty" % V.GrpcRestGateway

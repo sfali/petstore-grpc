@@ -12,6 +12,7 @@ boot/
 logs/
 out/
 tmp/
+pgdata/
 projectFilesBackup/
 .history
 .idea/
@@ -26,7 +27,7 @@ RUNNING_PID
 .bloop/
 .metals/
 .vscode/
-.bsp
+.bsp/
 sbt-cache/**
 .toDelete
 **/buf*.yaml
