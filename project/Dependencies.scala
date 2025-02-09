@@ -33,7 +33,8 @@ object Dependencies {
     "org.apache.pekko" %% "pekko-actor-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-stream-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-http" % V.PekkoHttp,
-    "org.apache.pekko" %% "pekko-grpc-runtime" % V.PekkoGrpc,
+    "org.apache.pekko" %% "pekko-grpc-runtime" % V.PekkoGrpc excludeAll
+      ExclusionRule(organization = "org.apache.pekko", name = "pekko-stream"),
     "com.thesamet.scalapb" %% "compilerplugin" % V.ScalaPb % "compile;protobuf",
     "com.thesamet.scalapb" %% "scalapb-runtime" % V.ScalaPb % "compile;protobuf",
     "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % V.ScalaPb,
@@ -45,13 +46,16 @@ object Dependencies {
   val PekkoBootstrap: Seq[ModuleID] = Seq(
     "org.apache.pekko" %% "pekko-cluster-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-remote" % V.Pekko,
-    "org.apache.pekko" %% "pekko-discovery" % V.Pekko,
+    "org.apache.pekko" %% "pekko-discovery" % V.Pekko excludeAll
+      ExclusionRule(organization = "org.apache.pekko", name = "pekko-actor"),
+    "org.apache.pekko" %% "pekko-cluster-sharding" % V.Pekko,
     "org.apache.pekko" %% "pekko-management" % V.PekkoManagement,
     "org.apache.pekko" %% "pekko-management-cluster-http" % V.PekkoManagement,
     "org.apache.pekko" %% "pekko-management-cluster-bootstrap" % V.PekkoManagement
   )
 
   val Service: Seq[ModuleID] = Seq(
+    "org.apache.pekko" %% "pekko-persistence" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence-r2dbc" % V.PekkoPersistenceR2dbc,
     "org.apache.pekko" %% "pekko-persistence-testkit" % V.Pekko % Test

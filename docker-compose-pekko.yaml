@@ -27,6 +27,10 @@ services:
       - "8080:8080"
     environment:
       - JAVA_OPTS=-Dconfig.resource=docker.conf
+      - POSTGRES_SERVER_HOST=postgres
+      - POSTGRES_SERVER_DATABASE=petstore
+      - POSTGRES_SERVER_USER=petstore
+      - POSTGRES_SERVER_PASSWORD=%LUj#3rC
     depends_on:
       - postgres
 
