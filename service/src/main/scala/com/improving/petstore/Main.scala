@@ -1,12 +1,15 @@
 package com.improving
 package petstore
 
-import com.improving.petstore.server.{GrpcServer, HttpSettings}
+import petstore.server.{GrpcServer, HttpSettings}
+import petstore.domain.behaviour.pet.PetServiceEntity
 import com.typesafe.config.Config
 import org.apache.pekko.Done
 import org.apache.pekko.actor.NoSerializationVerificationNeeded
 import org.apache.pekko.actor.typed.scaladsl.Behaviors
 import org.apache.pekko.actor.typed.{ActorSystem, Behavior}
+import org.apache.pekko.cluster.sharding.typed.scaladsl.ClusterSharding
+import org.apache.pekko.management.cluster.bootstrap.ClusterBootstrap
 import org.apache.pekko.management.scaladsl.PekkoManagement
 
 import scala.util.{Failure, Success}
@@ -44,7 +47,11 @@ object GuardianBehavior {
 
         Behaviors.receiveMessagePartial {
           case Init =>
-            context.pipeToSelf(init(config.getConfig("app.grpc-settings"))) {
+            ClusterBootstrap(system).start()
+            val sharding = ClusterSharding(system)
+            PetServiceEntity.init(sharding)
+
+            context.pipeToSelf(init(config.getConfig("app.grpc-settings"), sharding)) {
               case Failure(ex) =>
                 context.log.error("Unable to start system", ex)
                 FailedInit
@@ -58,17 +65,16 @@ object GuardianBehavior {
             system.terminate()
             Behaviors.stopped
 
-          case SystemStarted =>
-            Behaviors.same
+          case SystemStarted => Behaviors.same
         }
       }
       .narrow
 
-  private def init(config: Config)(implicit system: ActorSystem[?]) = {
+  private def init(config: Config, sharding: ClusterSharding)(implicit system: ActorSystem[?]) = {
     import system.executionContext
     for {
       _ <- PekkoManagement(system).start()
-      _ <- GrpcServer(HttpSettings(config)).run()
+      _ <- GrpcServer(HttpSettings(config), sharding).run()
     } yield Done
   }
 }

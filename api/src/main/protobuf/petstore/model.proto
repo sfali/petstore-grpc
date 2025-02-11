@@ -38,7 +38,7 @@ enum PetStatus {
 
 message Pet {
   int64 id = 1;
-  Category category = 2 [(scalapb.field).no_box = true];
+  Category category = 2;
   string name = 3;
   repeated string photoUrls = 4;
   repeated Tag tags = 5;

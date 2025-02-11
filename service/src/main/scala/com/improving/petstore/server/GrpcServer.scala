@@ -2,21 +2,29 @@ package com.improving
 package petstore
 package server
 
-import petstore.api.scala_api.{OrderService, OrderServiceHandler, PetService, PetServiceHandler, UserService, UserServiceHandler}
+import petstore.api.scala_api.{
+  OrderService,
+  OrderServiceHandler,
+  PetService,
+  PetServiceHandler,
+  UserService,
+  UserServiceHandler
+}
 import server.service.{OrderServiceImpl, PetServiceImpl, UserServiceImpl}
 import org.apache.pekko.actor.typed.ActorSystem
+import org.apache.pekko.cluster.sharding.typed.scaladsl.ClusterSharding
 import org.apache.pekko.grpc.scaladsl.{ServerReflection, ServiceHandler}
 import org.apache.pekko.http.scaladsl.Http
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class GrpcServer(settings: HttpSettings)(implicit system: ActorSystem[?]) {
+class GrpcServer(settings: HttpSettings, sharding: ClusterSharding)(implicit system: ActorSystem[?]) {
   private implicit val ec: ExecutionContext = system.executionContext
 
   def run(): Future[Http.ServerBinding] = {
     val services = ServiceHandler.concatOrNotFound(
-      PetServiceHandler.partial(new PetServiceImpl()),
+      PetServiceHandler.partial(new PetServiceImpl(sharding)),
       OrderServiceHandler.partial(new OrderServiceImpl()),
       UserServiceHandler.partial(new UserServiceImpl()),
       ServerReflection.partial(List(PetService, OrderService, UserService))
@@ -46,6 +54,6 @@ class GrpcServer(settings: HttpSettings)(implicit system: ActorSystem[?]) {
 }
 
 object GrpcServer {
-  def apply(settings: HttpSettings)(implicit system: ActorSystem[?]): GrpcServer =
-    new GrpcServer(settings)
+  def apply(settings: HttpSettings, sharding: ClusterSharding)(implicit system: ActorSystem[?]): GrpcServer =
+    new GrpcServer(settings, sharding)
 }

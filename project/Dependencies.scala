@@ -3,6 +3,7 @@ import sbt.*
 object Dependencies {
 
   object V {
+    val Enumeratum = "1.7.5"
     val GoogleCommonProtos = "2.9.6-0"
     val GrpcJava: String = scalapb.compiler.Version.grpcJavaVersion
     val GrpcRestGateway = "0.8.4"
@@ -14,6 +15,7 @@ object Dependencies {
     val PekkoPersistenceR2dbc = "1.1.0-M1"
     val Scala2_13 = "2.13.16"
     val Scala3 = "3.5.2"
+    val ScalaLogging = "3.9.5"
     val ScalaPb: String = scalapb.compiler.Version.scalapbVersion
     val ScalaPbJson = "0.12.1"
     val TypesafeConfig = "1.4.3"
@@ -25,6 +27,7 @@ object Dependencies {
 
   val Commons: Seq[ModuleID] = Seq(
     "ch.qos.logback" % "logback-classic" % V.Logback,
+    "com.typesafe.scala-logging" %% "scala-logging" % V.ScalaLogging,
     "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.11" % V.GoogleCommonProtos % "compile,protobuf"
   )
 
@@ -48,13 +51,15 @@ object Dependencies {
     "org.apache.pekko" %% "pekko-remote" % V.Pekko,
     "org.apache.pekko" %% "pekko-discovery" % V.Pekko excludeAll
       ExclusionRule(organization = "org.apache.pekko", name = "pekko-actor"),
-    "org.apache.pekko" %% "pekko-cluster-sharding" % V.Pekko,
+    "org.apache.pekko" %% "pekko-cluster-sharding-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-management" % V.PekkoManagement,
     "org.apache.pekko" %% "pekko-management-cluster-http" % V.PekkoManagement,
     "org.apache.pekko" %% "pekko-management-cluster-bootstrap" % V.PekkoManagement
   )
 
   val Service: Seq[ModuleID] = Seq(
+    "com.beachape" %% "enumeratum" % V.Enumeratum,
+    "org.apache.pekko" %% "pekko-serialization-jackson" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence-r2dbc" % V.PekkoPersistenceR2dbc,
