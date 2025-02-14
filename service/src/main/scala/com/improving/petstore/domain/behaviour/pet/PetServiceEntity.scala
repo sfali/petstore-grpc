@@ -8,6 +8,7 @@ import behaviour.protocols.ProcessingError
 import behaviour.protocols.PetStatus.Unknown
 import behaviour.protocols.{AddPet, ErrorType, PetCommandEnvelope, PetCommandOrQueryEnvelope, PetState}
 import org.apache.pekko
+import org.apache.pekko.persistence.r2dbc.state.scaladsl.R2dbcDurableStateStore
 import pekko.pattern.StatusReply
 import pekko.actor.typed.{ActorRef, Behavior}
 import pekko.actor.typed.scaladsl.{ActorContext, Behaviors}
@@ -57,6 +58,7 @@ object PetServiceEntity {
           emptyState = PetState(id = id, name = "", status = Unknown),
           commandHandler = commandHandler(context)
         )
+        .withDurableStateStorePluginId(R2dbcDurableStateStore.Identifier)
     }
 
   def init(

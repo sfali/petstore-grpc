@@ -3,7 +3,7 @@ package petstore
 
 import petstore.server.{GrpcServer, HttpSettings}
 import petstore.domain.behaviour.pet.PetServiceEntity
-import com.typesafe.config.Config
+import com.typesafe.config.{Config, ConfigRenderOptions}
 import org.apache.pekko.Done
 import org.apache.pekko.actor.NoSerializationVerificationNeeded
 import org.apache.pekko.actor.typed.scaladsl.Behaviors
@@ -42,6 +42,15 @@ object GuardianBehavior {
 
         implicit val system: ActorSystem[Nothing] = context.system
         val config = system.settings.config
+
+        // TODO: remove it
+        if (config.hasPath("app.test")) {
+          context.log.info(">>>>> {}", config.getString("app.test"))
+        }
+
+        context.log.info(">>>>> {}", config.getString("pekko.persistence.r2dbc.schema"))
+        context.log.info(">>>>> {}", config.getString("pekko.persistence.r2dbc.connection-factory.user"))
+        // TODO: remove it
 
         context.self ! Init
 

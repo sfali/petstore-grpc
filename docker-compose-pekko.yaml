@@ -25,6 +25,8 @@ services:
     image: sfali23/petstore-grpc-service:0.1.0-SNAPSHOT
     ports:
       - "8080:8080"
+      - "17355:17355"
+      - "7626:7626"
     environment:
       - JAVA_OPTS=-Dconfig.resource=docker.conf
       - POSTGRES_SERVER_HOST=postgres

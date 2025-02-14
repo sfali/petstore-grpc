@@ -13,6 +13,7 @@ object Dependencies {
     val PekkoHttp = "1.1.0"
     val PekkoManagement = "1.1.0"
     val PekkoPersistenceR2dbc = "1.1.0-M1"
+    val R2dbcPostgresql = "1.0.7.RELEASE"
     val Scala2_13 = "2.13.16"
     val Scala3 = "3.5.2"
     val ScalaLogging = "3.9.5"
@@ -63,6 +64,7 @@ object Dependencies {
     "org.apache.pekko" %% "pekko-persistence" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence-typed" % V.Pekko,
     "org.apache.pekko" %% "pekko-persistence-r2dbc" % V.PekkoPersistenceR2dbc,
+    "org.postgresql" % "r2dbc-postgresql" % "1.0.7.RELEASE",
     "org.apache.pekko" %% "pekko-persistence-testkit" % V.Pekko % Test
   ) ++ Commons ++ PekkoBootstrap
 
